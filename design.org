@@ -1,0 +1,14 @@
+* Survive Commons
+
+The survive commons will be two parts: mysql, nodejs.
+** mysql
+
+*** table design
+
+*** relation design
+
+*** mysql and nodejs connection
+
+** nodejs
+
+*** 
