@@ -1,0 +1,7 @@
+// this is a playground!
+
+function Foo(bar){
+    this.bar = bar;
+    this.baz = 'baz';
+}
+
