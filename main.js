@@ -1,5 +1,4 @@
 var http = require('http');
-
 var IP = "127.0.0.1";
 var port = 5800;
 var db = require('mysql');
