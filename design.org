@@ -1,7 +1,0 @@
-* Survive Commons
-
-The survive commons will be two parts: Database and Server
-
-* Database:
-
-
