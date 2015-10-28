@@ -4,6 +4,8 @@ exports.render = function(req, res){
 	}
 	req.session.lastVisit = new Date();
 	res.render('index',{
-		title: 'Fuck You'
-	})
+		title: "Survive Commons",
+		userFullName: req.user ? req.user.fullName: '', // what this line means?
+		body: "Survive Commons is a food reddit under VA♂N Licence"
+	});
 };

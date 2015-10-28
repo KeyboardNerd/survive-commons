@@ -1,4 +1,5 @@
-var users = require('../controllers/users.server.controller');
+var users = require('../controllers/users.server.controller'),
+passport = require('passport');
 module.exports = function(app){
 	app.route('/users')
 	.post(users.create)	
@@ -16,4 +17,55 @@ module.exports = function(app){
 	// handle population of the req.user object, users.userById() method will be executed before any other middleware registered with the userId parameter, which in this case is the users.read() middleware
 	app.param('userId', users.userByID);
 
+	app.route('/signup')
+	.get(users.renderSignup)
+	.post(users.signup);
+
+	app.route('/signin')
+	.get(users.renderSignin) // what is authenticate
+	.post(passport.authenticate('local',{
+		successRedirect: '/', // where to redirect the request once it successfully authenticated the user
+		failureRedirect: '/signin', // where to redirect the request once it failed to authenticate the user
+		failureFlash: true // whether or note to use flash messages
+	}));
+	// equals to app.route(sig).get(function)
+	app.get('/signout', users.signout);
+
+
+	// facebook strategy routes:
+	// use authenticate method to start the user authentication process
+	app.get('/oauth/facebook', passport.authenticate('facebook', {
+     failureRedirect: '/signin'
+   	}));
+   	// use authenticate method to finish the authentication process once the user has linked their facebookprofile
+   	app.get('/oauth/facebook/callback', passport.authenticate('facebook',
+   	{
+     failureRedirect: '/signin',
+     successRedirect: '/'
+   	}));
+
+
+   	// twitter strategy routes:
+   	app.get('/oauth/twitter', passport.authenticate('twitter', {
+   		failureRedirect: '/signin'
+   	}));
+   	app.get('/oauth/twitter/callback', passport.authenticate('twitter',
+   	{
+   		failureRedirect: '/signin',
+   		successRedirect: '/'
+   	}));
+
+
+   	// google strategy routes:
+   	app.get('/oauth/google', passport.authenticate('google', {
+     failureRedirect: '/signin',
+     scope: [
+       'https://www.googleapis.com/auth/userinfo.profile',
+       'https://www.googleapis.com/auth/userinfo.email'
+     ],
+	}));
+   	app.get('/oauth/google/callback', passport.authenticate('google', {
+    	 failureRedirect: '/signin',
+    	 successRedirect: '/'
+	}));
 };
