@@ -1,6 +1,7 @@
 {
-  "name": "survive-commons",
-  "version": "0.0.1",
-  "description": "Food web server",
-  "dependencies": "{}"
+	"name": "survive-commons",
+	"version": "0.0.1",
+	"dependencies": { 
+		"angular": "~1.2"
+	}
 }
