@@ -22,6 +22,7 @@ var getErrorMessage = function(err){
 	}
 	return message;
 };
+
 exports.renderSignin = function(req, res, next){
 	if (!req.user){
 		// what is render, and what is its parameter
@@ -166,3 +167,13 @@ exports.saveOAuthUserProfile = function(req, profile, done){
 		}
 	});
 };
+// uses passport initiated req.isAuthenticated() method to check whether a user is currently authenticated.
+
+exports.requiresLogin = function(req, res, next){
+	if (!req.isAuthenticated()){
+		return res.status(401).send({
+			message: 'User is not logged in'
+		});
+	}
+	next();
+}
