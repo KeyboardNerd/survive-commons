@@ -144,7 +144,7 @@ UserSchema.virtual('fullName').get(function(){
 
 UserSchema.set('toJSON', {getters: true, virtuals: true}); //force mongoose to include getter in effect, otherwise it won't in effect
 
-mongoose.model('User', UserSchema);
+
 
 var PostSchema = new Schema({
   title: {
@@ -161,4 +161,5 @@ var PostSchema = new Schema({
   }
 });
 
+mongoose.model('User', UserSchema);
 mongoose.model('Post', PostSchema);

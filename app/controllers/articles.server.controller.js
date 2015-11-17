@@ -64,7 +64,7 @@ exports.update = function(req, res){
 	article.save(function(err){
 		if (err){
 			return res.status(400).send({
-				message.getErrorMessage(err)
+				message: getErrorMessage(err)
 			});
 		} else{
 			res.json(article);
@@ -72,7 +72,7 @@ exports.update = function(req, res){
 	});
 };
 
-exports.delete = function(req, res){
+exports.delete = function(req, res, next){
 	var article = req.article;
 	article.remove(function(err){ // mongoose model's remove() method, and output the deleted article
 		if (err){
@@ -81,6 +81,7 @@ exports.delete = function(req, res){
 			});
 		} else{
 			res.json(article);
+			next();
 		}
 	});
 };

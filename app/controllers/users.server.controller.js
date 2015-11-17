@@ -88,24 +88,28 @@ exports.create = function(req, res, next){ // what's exports.create
 	});
 };
 exports.list = function(req, res, next){
-	User.find({},'username created', function(err, users){
+	User.find({},'username created', function(err, usrs){
 		if (err){
 			return next(err);
 		} else{
-			res.json(users);
+			res.json(usrs);
 		}
 	});
 };
 // get the json representation of the req.user object
 // 
 exports.read = function(req, res){
+	console.log('you are fucked here');
+	for (var property in req){
+		console.log(property);
+	}
 	res.json(req.user);
 };
 // read single document
 exports.userByID = function(req, res, next, id){
-
+	console.log(req + res + id);
 	User.findOne({
-		_id: id
+		_id: id._id
 	}, function(err, user) {
 		if (err) {
 			return next(err);
@@ -117,7 +121,6 @@ exports.userByID = function(req, res, next, id){
 };
 // Mongoose contains
 // update, findOneAndUpdate and findByIdAndUpdate method
-//
 exports.update = function(req, res, next){
 	User.findByIdAndUpdate(req.user.id, req.body, function(err, user){
 		if (err){

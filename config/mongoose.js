@@ -1,7 +1,8 @@
 var config = require('./config'), mongoose = require('mongoose');
+// link sheme 
 module.exports = function(){
 	var db = mongoose.connect(config.db);
-	require('../app/models/user.server.model'); // link the schema file in user.server.model to the app
-	require('../app/models/article.server.model');
+	require('../app/models/post.server.model.js'); 
+	require('../app/models/poster.server.model.js'); // can i delete these two lines?
 	return db;
 }

@@ -22,3 +22,5 @@ var ArticleSchema = new Schema({
 		ref: 'User' // User is a collection
 	}
 });
+
+mongoose.model('Article', ArticleSchema);// register the schema to Article

@@ -1,0 +1,114 @@
+TO MAINTAINERS:
+simple doc about the project:
+using MEAN (mongoose, ejs, angular js, node js)
+M: database, ejs: html template, angular js: front-end js framework, node js: back-end js framework.
+------------------------------
+!NOTICE:
+$scope: scope is the reference to variables in a html template. The ng-controller of the html template will lead to the source of the variables.
+
+--------------------
+The forum is anonymous, which means everyone who's writing food in specific place can write the post directly without account.
+
+The design:
+db contains scheme: post, pic and user
+
+user: db contains user information
+_id, Number of posts, name (we can choose to show it or not)
+
+pic: db contains picture information
+_id, link_full, link_shrinked
+
+post: db contains posted things
+_id, title, shortdescription, description, likeness, likenesslevel, poster_id (user), pic_id (pic), post_time, like, hate
+
+------------------------------
+cascading res and req
+this is freaking hard to remember the order, i'll put it here.
+symbols:
+
+>(obj) new object created
++(obj) object changed
+-(obj) object removed
+
+post:
+r:
+get
+>(req.post = post)  post_by_id
+
+
+------------------------------
+useful docs:
+link: http://expressjs.com/api.html
+res.json(): sends a json reponse with an object or array as the parameter, including null and undefined.
+
+------------------------------
+design:
+server-side:
+modules:
+* poster.server.module.js
+  _id, name, posts, expire
+controllers:
+* post.server.controller.js
+  post is visible to all users, have cookie or not
+  create, list, post_by_id, read, update, delete, authorized
+** create (users with cookie)
+** list (all users)
+** read (all users)
+** update (forbidden to users)
+** delete (users with cookie)
+** authorized (all users)
+* poster.server.controller.js
+  poster is invisible to user, 
+  create, list, poster_by_id, read, update, delete, authorized
+** create (we decide when it will be called)
+** list (forbidden to users)
+** poster_by_id (forbidden to users)
+** read (forbidden to users)
+** delete (forbidden to users)
+** authorized (all users)
+routers:
+* main page: / or /post
+  high level description: contains a list of foods, each row contains a picture, title and short description and likeness level.
+  requirement: database: title, short_description(virtual), likenesslevel
+  actions: the main page only accept get action, the other actions will result in 403
+    1. check if the user already has a cookie
+       if req.poster.authorized:
+          next();
+       else
+          if constant.cookie_leasing is true:
+             create new poster
+             append new poster._id to cookie of the res
+             next()
+          else
+             next()
+    2. get a list of posts
+    3. render the list of posts to ejs
+
+* single post page /post/123jdi390 *beta
+  high level description: contains a picture and a few steps from end to start (important!), it contains at least one of text or picture.
+  1. check if the post is here
+  2. get the post using post_by_id (which also checks if the post exists)
+  3. render the post to ejs (rendering including parse the string of content)
+
+* newpost page /newpost/ *beta
+  contains two text area, one is subject, second is content, press post to post it!
+  1. 
+     if req.poster.authorized:
+        next();
+     else 
+        redirect to error page
+     end
+  2. get the newpost code template
+  3. render the ejs
+
+* error page /error/
+  show that this is error page and wait for a few seconds to go back to the home page.
+
+/** version 1.01
+* editpost page /editpost/
+  post can be editted only with the cookie
+  1. check if req.poster is authorized
+     true->next(); false->errorpage
+  2. get the editpost code template
+  3. render the ejs
+**/
