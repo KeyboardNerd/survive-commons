@@ -22,6 +22,13 @@ post: db contains posted things
 _id, title, shortdescription, description, likeness, likenesslevel, poster_id (user), pic_id (pic), post_time, like, hate
 
 ------------------------------
+function rights:
+functions are only visible to some group of users:
+x: can execute, -: can't execute
+define:
+right of admin,user,nonuser -> x,x,x -> xxx
+------------------------------
+
 cascading res and req
 this is freaking hard to remember the order, i'll put it here.
 symbols:
@@ -112,3 +119,257 @@ routers:
   2. get the editpost code template
   3. render the ejs
 **/
+
+------------------------------
+About anonymous things:
+anonymous is based on cookie:
+angular js is able to send cookie to the server by:
+put(key, value)
+and able to recieve cookie from server by:
+Object get(key, value) or Object getAl()
+
+cookie design:
+poster: poster._id
+expire: poster.expire
+
+authorization process:
+> new user
+A new request comes from client with empty cookie:
+check if it's possible to make a cookie (defined by accept_cookie == 1)
+if true -> make a user in the poster database and return a cookie with key 'poster_credential': poster.cookie
+if false -> next()
+> old user
+>> A request comes from client with non-empty cookie:
+get cookie field 'poster_credential' and retrive the cookie string that associated with it.
+------------------------------
+Q&A
+Q: authorization process only happens when user login to the main page '/'?
+A: Yes
+----------------------------------------
+TODOLIST
+bootstrapify:
+create-post.client.view.html 
+edit-post.client.view.html
+list-post.client.view.html
+view-post.client.view.html
+----------------------------------------
+how the front end work:
+each item has a auto generated html file
+I'd like to understand the html file in angularjs as a fragment of the page
+ejs is the renderer for all pages.
+
+what user see is the rendered whole html page using ejs, which contains html fragment using angularjs.
+
+
+----------------------------------------
+JAVASCRIPT
+data type:
+[array],array[index]
+----------------------------------------
+ANGULARJS
+It's basically javascript, so you know the drill.
+
+known priority of evaluation:
+| > in
+
+directives:
+> data-ng- instead of ng- to make HTML page valid for HTML parser
+> ng-init initalize some data, i.e. define the variables, closures...
+> ng-app define it as an angularjs app, will automatically initialize the application (initilaize the application variables)
+> ng-repeat iterate array of objects, this part will be repeated some times
+	  e.g. ng-repeat="x in names"
+> ng-model binds the value of html controls to application data, if the application variable doesn't exists, it will create the data, otherwise, update the data.
+> ng-bind binds application data to html view, the data is evaluted before sending to the view.
+> ng-controller same bullshit, initialize the data with controller belongs to ng-app, 
+> ng-if, if the expression is true, display the section, otherwise, hide the section.
+> ng-disabled, if the expression is true, enable the section, otherwise disable the section. (called html dom)
+> ng-show, (beta) == ng-if
+> ng-hide, (beta) == !ng-if
+> ng-click, on click: evaluate the expression, note the expression is NOT dynamic, it's statistic, therefore the variables are confirmed when the line is interpreted!
+> ng-include, express is a html file, it will load the html string into this html file.
+angularJS expressions: {{expression}}; evaluate the data and output the string form
+e.g. ng-model="name", name becomes a variable, {{name}} will evaluate the variable and output the string form of the data.
+
+angular.module('module_name', ['dependence',...]); define angularjs application
+angularapplication.controller('controller_name', function($scope){
+> $scope.name = 'something';
+> $scope.dosomething = function(){
+		   ... 
+}
+}); defines the controller that each varialbe can be evaluated in the scope, which is where the application will be used.
+angular.module is compiled after the library has been loaded. best to put the script in head or at start of the html body
+
+
+calling things in controller:
+use: foo() for function, foo for variables, don't forget the object
+
+load things in external files:
+just <script src="././././././././.js"></script>
+then you're free to use the what so ever is here to make the shit run
+
+angularJS filters: use '|' pipe character to add a filter, evaluate direction: >>
+filers: currency (num->curr) filter:ng-model (array->subset) lowercase (string->lowercasedstring) orderBy:string_key (array->sortedarray) uppercase(string->uppercasestring)
+
+> $http: angularJS service (module) to dothings on remote-server
+  $http.get(string_serveraddr).success(function(response) {response.records;});
+> $index: angularJS table index...
+> $odd: equals to $index%2 === 1
+> $even: equals to $index%2 === 0
+> $dirty: inside model, if user has interacted with the field, i.e. modified the field in any sense any time.
+> $invalid: inside model, check if the variable is valid (how)
+> $valid: check if the field is invalid (how)
+> $error: 
+> $pristine: user has no interaction with the field -> true, otherwise->false
+> $scope.$watch('variable_name', function(){....}); call function on varialbe change.
+
+Angular global api
+> angular.module: load module
+> angularapp.controller: load controller for some application(module)
+> angular.copy: return the copied data from expression
+> angular.lowercase: lowercase
+> angular.uppercase: uppercase
+> angular.isString: isString
+> angular.isNumber: isNumer
+
+Use angular with bootstrap:
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+or href can refer to a local addr.
+
+
+------------------------------
+HTML DOM:
+
+------------------------------
+CSS
+define style: define the directives to some css object
+<style>
+table{
+	border: 1px solid grey;
+}
+</style>
+------------------------------
+EXPRESSJS
+Routing functions (string_path, function)
+app.put
+app.delete
+app.get
+app.post
+app.all
+
+string_path is a string/string pattern/regexp
+string: string. string pattern: ab?cd -> abcd, acd; ab+cd->abcd,abbbbcd...; ab*cd->abcd,abrandomstringcd;ab(cd)?e->abe, abcde.regexp: other topic...
+
+function is called route function, with parameter req, res, next (order is important)
+end with res.end() or any function that contains this. next will make it call the next funciton.
+
+funcitons contains for res.end():
+Method	  Description
+res.download()	Prompt a file to be downloaded.
+res.end()	End the response process.
+res.json()	Send a JSON response.
+res.jsonp()	Send a JSON response with JSONP support.
+res.redirect()	Redirect a request.
+res.render()	Render a view template.
+res.send()	Send a response of various types.
+res.sendFile	Send a file as an octet stream.
+res.sendStatus()     Set the response status code and send its string representation as the response body.
+
+setmultiple:
+app.route(string_path).get(funciton).post....
+
+express.Router
+crap, essentially wrap function into a route function into a object, so that every route can be used in different place and different order.
+e.g. r=  express.Router(); r.get(...); app.use('/', r);
+
+application method
+app.use([path], funciton, [function...]), mount the middleware funcitons at the path, if path is not specified, default to '/'
+it will match any path that contains this: e.g. use(/crap, shit), shit will be in effect at /crap/1pound, /crap/1pound/horse
+*order of use is important, first interpreted, first run
+*path can be regrex, str, strpattern,arrayofpreivousfew
+
+express.static(root, option)
+redirect the directory
+
+request: common variables
+> req.app
+> req.baseUrl
+> req.body: default: undefined, contains key-value pairs of data, bodyParser will give the object if  using use(bodyParse.whathell);
+
+> req.cookies: if using cookie-parser middleware.
+> req.fresh:
+is true if:
+The if-modified-since request header is specified and last-modified request header is equal to or earlier than the modified response header.
+The if-none-match request header is *.
+The if-none-match request header, after being parsed into its directives, does not match the etag response header.
+otherwise false
+> req.hostname if trust proxy setting is non-falsey, from 
+> req.ip if trust proxy setting is non-falsey, from X-Forwarded-For header
+> req.ips if ......, return an array ['client', 'proxy1', 'proxy2']...
+
+> req.originalUrl
+> req.params: an object containing something:
+e.g. if route /user/:name, we can retrieve the :name string using req.params.name
+if route /user/string or string pattern or regrex, we can retrieve string... using req.params[n] where n is the nth possible string.
+> req.path, contains the path of req url
+> req.protocol: trust proxy nonfalse, from X-Forwarded-Proto.
+> req.query: obj containing a property for each query string parameter in the route, if there's no query string, it's empty object.
+> req.route: string,
+> req.secure: req.protocol == 'https'
+> req.signedCookies
+> req.stale
+> req.subdomains
+> req.xhr
+
+methods:
+> req.accepts(types), undefined if the header type is not acceptable, otherwise return the preferred string.
+> req.acceptsCharsets,encodings,languages....
+> req.get(field), returns the specified HTTP request header field
+> req.is(type), if the request is the type
+
+response
+> res.app = req.app
+> res.headerSent bool if app sent http headers for response
+> res.locals: obj
+An object that contains response local variables scoped to the request, and therefore available only to the view(s) rendered during that request / response cycle (if any). Otherwise, this property is identical to app.locals.
+
+This property is useful for exposing request-level information such as the request path name, authenticated user, user settings, and so on.
+
+methods:
+res.append('', '');
+res.attachment([filename]);
+res.cookie(name, value [,options]): set cookie name to value. The value parameter may be a string or object converted to JSON.
+options is an object that can contain:
+Property, Type, Description
+domain	  String	Domain name for the cookie. Defaults to the domain name of the app.
+expires	  Date		Expiry date of the cookie in GMT. If not specified or set to 0, creates a session cookie.
+httpOnly  Boolean	Flags the cookie to be accessible only by the web server.
+maxAge	  String	Convenient option for setting the expiry time relative to the current time in milliseconds.
+path	  String	Path for the cookie. Defaults to “/”.
+secure	  Boolean	Marks the cookie to be used with HTTPS only.
+signed	  Boolean	Indicates if the cookie should be signed.
+> res.clearCookie(name, [, options])
+clear the cookie specified by name
+> res.download(path [,filename] [,fn])
+path: transfers the file at path as an 'attachment'
+browsers prompt the user for download
+[filename] is the filename that user can see
+function(err) is used to handle the error
+> res.end([data][,encoding])
+res.end();
+res.status(404).end();
+> res.format({string_requestType: function(){},...}): act like switch
+> res.get(field): get http field
+> res.json([body]): send a json response, including converting null and undefined, which is not supported by res.send()
+> res.links(links):
+  res.links({next: '', last: ''});
+> res.location(path): ?
+> res.redirect([status,] path): redirects to the URL derived from the specified path, with specified HTTP status code status, if it's not specified status,
+> res.render(view [,locals] [,callback]): render the view and send the rendered html string to the client.
+> res.send([body]): body buffer, string, obj, array
+> res.sendStatus(code); == res.status(code).send('string responses to the code')
+> res.set(field [,value]); set corresponding field header to value
+> res.status(statusCode)
+> res.type(type) -> set content-type http header to the MIME type as determined by mime.lookup() for the specified type
+> res.vary(field) -> adds field to the vary response header,
+------------------------------------------------------------
+
