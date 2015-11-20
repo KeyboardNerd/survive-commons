@@ -1,0 +1,18 @@
+<section class="container" data-ng-app="survivecommons" data-ng-controller="indexController">    
+    <h1>Survive Commons</h1>
+        <div class="container">
+    <h2> Start a new post </h2>
+
+
+    </div>
+    <h2>Posts</h2>
+    <div ng-repeat="post in post_list">        
+        <button type="button" ng-click="action_upvote(post._id)">like</button>
+        <button type="button" ng-click="action_downvote(post._id)">hate</button>
+        <div type="text" data-ng-bind="post.title"></div>
+        <div type="text" data-ng-bind="post.like"></div>
+        <div type="text" data-ng-bind="post.hate"></div>
+        <div type="text" data-ng-bind="post.likeness"></div>
+        <div type="text" data-ng-bind="post.likenesslevel"></div>
+    </div>
+</section>

@@ -1,7 +1,4 @@
-var post = require('../controllers/post.server.controller.js'),
-	errordir = require('../controllers/errordir.server.controllers.js'),
-	index = require('../controllers/index.server.controller.js');
-
+var render = require('../controller/render.server.controller');
 module.exports = function(app){
-    app.get('/',index.authorized, post.list, index.render);
+    app.get('/', render.renderIndex);
 };

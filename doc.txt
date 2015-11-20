@@ -373,3 +373,22 @@ res.status(404).end();
 > res.vary(field) -> adds field to the vary response header,
 ------------------------------------------------------------
 
+------------------------------------------------------------
+
+------------------------------------------------------------
+
+notice
+
+PLEASE NOTICE SOMETHING:
+
+require() will actually evaluate the code, and gives the variable in exports!
+
+HTML will actually run the code inside script.
+
+
+------------------------------------------------------------
+mongoose
+
+Scheme
+instance methods is defined inside Schema.methods...
+

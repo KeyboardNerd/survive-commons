@@ -1,0 +1,14 @@
+this is a file that descrip the implementation of how serverside and client communicate
+when user login the main page: '/'
+
+-> render will send the necessary code to client side, the angularJS code
+
+then, every thing is done in the clientside, using the angularJS
+
+(angularJS will handle the user action, including the request of the database, put...)
+
+The server doesn't communicate with user directly using the ejs render, because of server load
+
+the route in server will used to only responds to angularJS requests.
+
+that's all, we use angualrJS as the local application

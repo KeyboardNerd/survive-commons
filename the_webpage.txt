@@ -1,0 +1,14 @@
+How each webpage is linked and the allowed query url is here:
+
+I think it's better to be one page application
+
+main page : /
+get: return a list of shrot articles from post collection
+each item contains a picture, a title and a short description
+
+post: post the upvote thing
+
+------------------------------
+detail view: /post/url...
+get: return a article from post collection specified by the url
+post: is forbidden

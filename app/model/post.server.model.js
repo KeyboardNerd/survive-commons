@@ -1,6 +1,5 @@
-var mongoose = requrie('mongoose'),
-	Schema = mongoose.Schema,
-	constants = require('../../config/constant.js');
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
 	time_create: {
@@ -11,28 +10,18 @@ var PostSchema = new Schema({
 		type: String,
 		default: '',
 		trim: true,
-		required: 'You gotta want a title'
 	}, 
 	description: {
 		type: String,
 		default: '',
 		trim: true,
-		required: 'You wanna say something to folks' 
 	},
 	original_poster: {
 		type: Schema.ObjectId,
 		ref: 'Poster'
 	},
-	likeness: {
-		type: Number, 
-		default: 0
-	},
-	likeness_level: {
-		type: Number,
-		default: 0
-	},
 	like: {
-		type: NUmber,
+		type: Number,
 		default: 0
 	},
 	pic: {
@@ -43,11 +32,22 @@ var PostSchema = new Schema({
 		type: Number,
 		default: 0
 	}
+}, {
+    toObject: {
+        virtuals: true
+    },
+    toJSON:{
+        virtuals: true
+    }
 });
 
-PostSchema.post('save', function(document){
-	if (constants.debug == 1){
-		console.log('post ' + document._id + ' is created');
-	}
-})
+var theta = function(value){
+    return value - 10;
+}
+
+PostSchema.virtual('likeness').get(function(){ return this.like - this.hate;
+});
+PostSchema.virtual('likeness_level').get(function(){
+   return theta(this.like - this.hate);
+});
 mongoose.model('Post', PostSchema);
