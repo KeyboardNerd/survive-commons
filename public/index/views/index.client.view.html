@@ -1,18 +1,33 @@
 <section class="container" data-ng-app="survivecommons" data-ng-controller="indexController">    
     <h1>Survive Commons</h1>
-        <div class="container">
+    <div class="container">
+    <div class="panel panel-default">
     <h2> Start a new post </h2>
-
-
+        <input type="text" class="form-control" placeholder="Title" aria-describedby="1" data-ng-model="userinput_title">
+        <div class="form-group">
+            <textarea class="form-control" rows="5" id="comment" data-ng-model="userinput_content"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" data-ng-click="action_push_data()">Post</button>
+        <div class="alert alert-warning" ng-show='userinput_title_error'>
+          <strong>Title needs to be longer > 10 characters</strong>
+        </div>
     </div>
     <h2>Posts</h2>
-    <div ng-repeat="post in post_list">        
-        <button type="button" ng-click="action_upvote(post._id)">like</button>
-        <button type="button" ng-click="action_downvote(post._id)">hate</button>
-        <div type="text" data-ng-bind="post.title"></div>
-        <div type="text" data-ng-bind="post.like"></div>
-        <div type="text" data-ng-bind="post.hate"></div>
-        <div type="text" data-ng-bind="post.likeness"></div>
-        <div type="text" data-ng-bind="post.likenesslevel"></div>
-    </div>
+
+    <div class="row">
+    <div ng-repeat="post in post_list" class="col-sm-6 col-md-6 col-lg-4 container panel panel-default">
+        <div class="panel-body">
+            <h2 type="text" data-ng-bind="post.title"></h2>
+            <p type="text" data-ng-bind="post.description"></p>
+            <div type="text" data-ng-bind="post.like"></div>
+            <div type="text" data-ng-bind="post.hate"></div>
+            <div type="text" data-ng-bind="post.likeness"></div>
+            <div type="text" data-ng-bind="post.likeness_level"></div>
+            <img src="/img/happy.jpeg" data-ng-show="{{post.likeness_level > 0}}" width="50">
+            <img src="/img/sad.png" data-ng-show="{{post.likeness_level <= 0}}" width="50">
+            <button type="button" ng-click="action_upvote(post._id)">like</button>
+            <button type="button" ng-click="action_downvote(post._id)">hate</button>
+            <button type="button" ng-click="action_delete(post._id)">delete</button>
+        </div>
+    </div>  
 </section>

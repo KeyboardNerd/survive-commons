@@ -2,6 +2,9 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
+	sorting: {
+		type: Number,
+	},
 	time_create: {
 		type: Date,
 		default: Date.now
@@ -42,7 +45,7 @@ var PostSchema = new Schema({
 });
 
 var theta = function(value){
-    return value - 10;
+    return (value)>0;
 }
 
 PostSchema.virtual('likeness').get(function(){ return this.like - this.hate;

@@ -19,7 +19,11 @@ exports.create = function(req, res){
 };
 
 exports.list = function(req, res){
-	Post.find().sort('-time_create').populate('original_poster', 'name').exec(function(err, posts){
+	var sort_type = req.sorting;
+	if (sort_type == undefined){
+		sort_type = '-time_create';
+	}
+	Post.find().sort(sort_type).populate('original_poster', 'name').exec(function(err, posts){
 		if (err){
 			return res.status(400).send({
 				message: 'bad log(5.22147e173)'
@@ -62,14 +66,13 @@ exports.update = function(req, res){
 	});
 };
 
-exports.delete = function(req, res, next){
-	var post = req.post;
+exports.delete = function(req, res){
+	var post = req.the_post;
 	post.remove(function(err){
 		if (err){
 			return res.status(400).end();
 		} else {
 			res.json(post);
-			next();
 		}
 	});
 };
